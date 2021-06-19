@@ -1,0 +1,12 @@
+[Unit]
+Description=Setup RoninDojo
+After=oem-boot.service
+
+[Service]
+Type=simple
+ExecStart=/opt/setup/ronin-setup.sh
+RemainAfterExit=true
+StandardOutput=journal
+
+[Install]
+WantedBy=multi-user.target
