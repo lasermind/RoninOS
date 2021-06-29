@@ -108,5 +108,5 @@ echo "OEM complete"
 cat /etc/motd
 
 systemctl enable ronin-setup.service
-
+systemctl disable oem-boot.service
 systemctl reboot
