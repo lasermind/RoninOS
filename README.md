@@ -13,6 +13,10 @@ Notes:
 - Overlay contains files to make the setup more effecticent but most importantly are the files in /opt/
   - a git repo of RoninDojo 
   - the ronin-oem-fast.sh (this is a modification of the manjaro-arm oem script to ensure other services are enabled and user is setup during boot. Then reboot the device.
+    - this is where the username, passwd, locale, keyboard, etc 
+    - perhaps a randomly generated username,passwd is created and stored in a tmp dir until the user changes on login to UI.
   - In /opt/setup is the ronin-setup.sh:
      - This script is what gives and later removes the permissions of admin user
      - Then runs the _main function from ronin, install-system.sh, and install-dojo.sh
+
+- Currently error with installing RoninUI during setup.
