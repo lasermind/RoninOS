@@ -9,35 +9,32 @@ nano
 dhcpcd
 man-pages
 man-db
-ntfs-3g
 zswap-arm
 
 # Minimal edition packages
 iwd
 
-#Ronin
-tor
-docker
-docker-compose
+# RoninDojo
+avahi
+pm2
+nginx
 jdk11-openjdk
-vim
-ufw
+tor
 python3
-python-pipenv
 fail2ban
-htop
-unzip
 net-tools
+htop
+vim
+unzip
 which
 wget
-nodejs-lts-fermium
-git
-jq
+docker
+docker-compose
+ufw
 rsync
-avahi
-nginx
-libusb
-pm2
-gptfdisk
+nodejs-lts-fermium
+npm
+jq
 python-pipenv
+gptfdisk
 gcc
