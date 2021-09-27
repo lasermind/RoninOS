@@ -1,12 +1,8 @@
 [Unit]
 Description=Ronin OEM Fast
-#After=systemd-user-sessions.service
-#After=dhcpcd.service
-#Before=getty.service
 
 [Service]
 ExecStart=/opt/ronin-oem-fast.sh
-#WorkingDirectory=/opt/
 ExecStartPost=/opt/ronin-oem-teardown.sh
 RemainAfterExit=true
 StandardOutput=journal
