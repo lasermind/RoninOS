@@ -557,7 +557,7 @@ create_img() {
             dd if=/dev/zero of=${LDEV} bs=1M count=32 1> /dev/null 2>&1
             #partition with boot and root
             case "$DEVICE" in
-                oc2|on2|on2-plus|oc4|ohc4|vim1|vim2|vim3|gtking-pro|gsking-x|edgev|pinephone)
+                oc2|on2|on2-plus|oc4|ohc4|vim1|vim2|vim3|gtking-pro|gsking-x|edgev|rpi3|rpi4|pinephone)
                 parted -s $LDEV mklabel msdos 1> /dev/null 2>&1
                 ;;
                 *)
