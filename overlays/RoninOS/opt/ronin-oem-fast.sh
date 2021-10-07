@@ -56,6 +56,9 @@ create_oem_install() {
 
     sed -i -e "s/PermitRootLogin yes/#PermitRootLogin prohibit-password/" \
         -e "s/PermitEmptyPasswords yes/#PermitEmptyPasswords no/" /etc/ssh/sshd_config
+
+    # Enable password less sudo
+    echo "admin ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-nopasswd
 }
 
 if ! systemctl is-active --quiet dhcpcd.service; then

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Enable password less sudo
-echo "admin ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-nopasswd
-
 # Clone Repo
 git clone -b feat_plug_n_play https://code.samourai.io/ronindojo/RoninDojo
 
