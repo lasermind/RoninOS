@@ -15,6 +15,7 @@ zswap-arm
 iwd
 
 # RoninDojo
+git
 avahi
 pm2
 nginx
