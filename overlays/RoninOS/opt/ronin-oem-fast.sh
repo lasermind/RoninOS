@@ -15,7 +15,7 @@ create_oem_install() {
     chpasswd <<<"root:$ROOTPASSWORD"
 
     echo "Adding user $USER..."
-    useradd -m -G wheel,sys,audio,input,video,storage,lp,network,users,power -s /bin/bash "$USER" &>/dev/null
+    useradd -m -G wheel,sys,audio,input,video,storage,lp,network,users,power,docker -s /bin/bash "$USER" &>/dev/null
 
     echo "Setting full name to $FULLNAME..."
     chfn -f "$FULLNAME" "$USER" &>/dev/null
