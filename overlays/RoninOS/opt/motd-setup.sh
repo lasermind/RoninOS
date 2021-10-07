@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -r /etc/motd
+rm /etc/motd
 
 bash -c "cat <<EOF > /etc/motd
 Welcome to RoninDojo!
