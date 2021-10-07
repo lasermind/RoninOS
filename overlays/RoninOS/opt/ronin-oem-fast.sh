@@ -1,9 +1,9 @@
 #!/bin/bash
 
 TMPDIR=/var/tmp
-USER="admin"
-PASSWORD="admin"
-ROOTPASSWORD="ronindojoroot"
+USER="ronindojo-$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'4')"
+PASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
+ROOTPASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
 FULLNAME="RoninDojo"
 TIMEZONE="UTF-8"
 LOCALE="en_US.UTF-8"
@@ -58,7 +58,7 @@ create_oem_install() {
         -e "s/PermitEmptyPasswords yes/#PermitEmptyPasswords no/" /etc/ssh/sshd_config
 
     # Enable password less sudo
-    echo "admin ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-nopasswd
+    echo "${USER} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-nopasswd
 }
 
 if ! systemctl is-active --quiet dhcpcd.service; then
