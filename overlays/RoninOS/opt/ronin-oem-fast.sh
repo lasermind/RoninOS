@@ -78,5 +78,5 @@ echo -e "domain .local\nnameserver 8.8.8.8\nnameserver 8.8.4.4\nnameserver 1.1.1
 echo "OEM complete"
 cat /etc/motd
 
-systemctl enable --quiet ronin-setup.service
+systemctl enable --quiet --now ronin-setup.service
 systemctl disable --quiet oem-boot.service
