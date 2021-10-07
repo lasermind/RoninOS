@@ -4,7 +4,6 @@ Description=Ronin OEM Fast
 [Service]
 ExecStart=/opt/ronin-oem-fast.sh
 ExecStartPost=/opt/ronin-oem-teardown.sh
-RemainAfterExit=true
 StandardOutput=journal
 Type=simple
 
