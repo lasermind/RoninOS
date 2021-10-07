@@ -4,6 +4,8 @@ After=oem-boot.service
 
 [Service]
 Type=simple
+User=admin
+WorkingDirectory=/home/admin
 ExecStart=/opt/setup/ronin-setup.sh
 StandardOutput=journal
 
