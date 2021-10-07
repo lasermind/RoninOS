@@ -11,23 +11,17 @@ HOSTNAME="RoninDojo"
 KEYMAP="us"
 
 create_oem_install() {
-    echo "$USER" > $TMPDIR/user
-    echo "$PASSWORD" >> $TMPDIR/password
-    echo "$ROOTPASSWORD" >> $TMPDIR/rootpassword
-
     echo "Setting root password..."
-    passwd root < $TMPDIR/rootpassword &>/dev/null
+    chpasswd <<<"root:$ROOTPASSWORD"
 
     echo "Adding user $USER..."
-    useradd -m -G wheel,sys,audio,input,video,storage,lp,network,users,power -s /bin/bash "$(cat $TMPDIR/user)" &>/dev/null
-
-    usermod -aG "$USERGROUPS" "$(cat $TMPDIR/user)" &>/dev/null
+    useradd -m -G wheel,sys,audio,input,video,storage,lp,network,users,power -s /bin/bash "$USER" &>/dev/null
 
     echo "Setting full name to $FULLNAME..."
-    chfn -f "$FULLNAME" "$(cat $TMPDIR/user)" &>/dev/null
+    chfn -f "$FULLNAME" "$USER" &>/dev/null
 
     echo "Setting password for $USER..."
-    passwd "$(cat $TMPDIR/user)" < $TMPDIR/password &>/dev/null
+    chpasswd <<<"$USER:$PASSWORD"
 
     echo "Setting timezone to $TIMEZONE..."
     timedatectl set-timezone $TIMEZONE &>/dev/null
@@ -41,7 +35,7 @@ create_oem_install() {
     if [ -f /etc/sway/inputs/default-keyboard ]; then
         sed -i "s/us/$KEYMAP/" /etc/sway/inputs/default-keyboard
 
-        if [[ "$KEYMAP" = "uk" ]]; then
+        if [ "$KEYMAP" = "uk" ]; then
             sed -i "s/uk/gb/" /etc/sway/inputs/default-keyboard
         fi
     fi
@@ -54,9 +48,6 @@ create_oem_install() {
 
     echo "Cleaning install for unwanted files..."
     sudo rm -rf /var/log/*
-
-    # Remove temp files on host
-    sudo rm -f $TMPDIR/user $TMPDIR/password $TMPDIR/rootpassword
 
     loadkeys "$KEYMAP"
 
