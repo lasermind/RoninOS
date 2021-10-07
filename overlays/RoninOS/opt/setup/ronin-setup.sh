@@ -3,10 +3,24 @@
 # Enable password less sudo
 echo "admin ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-nopasswd
 
-su admin -c /home/admin/RoninDojo/ronin _main
-source /home/admin/RoninDojo/Scripts/defaults.sh /home/admin/RoninDojo/Scripts/functions.sh && su admin -c /home/admin/RoninDojo/Scripts/functions.sh _main
-su admin -c /home/admin/RoninDojo/Scripts/Install/install-system-setup.sh
-su admin -l /home/admin/RoninDojo/Scripts/Install/install-dojo.sh
+su - admin
+
+# Clone Repo
+git clone -b feat_plug_n_play https://code.samourai.io/ronindojo/RoninDojo
+
+# Source files
+cd "$HOME"/RoninDojo || exit
+. Scripts/defaults.sh
+. Scripts/functions.sh
+
+# Run main
+_main & export _pid="$!"
+
+# Run system setup
+Scripts/Install/install-system-setup.sh system
+
+# Run RoninDojo install
+Scripts/Install/install-dojo.sh dojo
 
 rm /etc/sudoers.d/99-nopasswd
 systemctl disable ronin-setup.service
