@@ -1,11 +1,13 @@
 [Unit]
 Description=Ronin OEM Fast
+After=network-online.target
+Wants=network-online.target
 
 [Service]
+Type=simple
 ExecStart=/usr/local/sbin/ronin-oem-fast.sh
 ExecStartPost=/usr/local/sbin/ronin-oem-teardown.sh
 StandardOutput=journal
-Type=simple
 
 [Install]
 WantedBy=multi-user.target
