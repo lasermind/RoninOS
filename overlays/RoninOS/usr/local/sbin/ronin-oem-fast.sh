@@ -17,6 +17,10 @@ create_oem_install() {
     echo "Adding user $USER..."
     useradd -m -G wheel,sys,audio,input,video,storage,lp,network,users,power,docker -s /bin/bash "$USER" &>/dev/null
 
+    # Set User and WorkingDirectory in ronin-setup.service unit file
+    sed -i -e "s/User=.*$/User=${USER}/" \
+        -e "s/WorkingDirectory=.*$/WorkingDirectory=\/home\/${USER}/" /usr/lib/systemd/system/ronin-setup.service
+
     echo "Setting full name to $FULLNAME..."
     chfn -f "$FULLNAME" "$USER" &>/dev/null
 
