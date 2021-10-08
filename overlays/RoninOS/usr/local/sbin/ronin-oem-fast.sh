@@ -3,7 +3,8 @@
 TMPDIR=/var/tmp
 USER="ronindojo-$(tr -dc 'a-z0-9' </dev/urandom | head -c'4')"
 PASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
-ROOTPASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
+#ROOTPASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
+ROOTPASSWORD="ronindojoroot"
 FULLNAME="RoninDojo"
 TIMEZONE="UTF-8"
 LOCALE="en_US.UTF-8"
