@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TMPDIR=/var/tmp
-USER="ronindojo-$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'4')"
+USER="ronindojo-$(tr -dc 'a-z0-9' </dev/urandom | head -c'4')"
 PASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
 ROOTPASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
 FULLNAME="RoninDojo"
