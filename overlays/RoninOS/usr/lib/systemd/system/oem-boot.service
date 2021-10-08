@@ -2,8 +2,8 @@
 Description=Ronin OEM Fast
 
 [Service]
-ExecStart=/opt/ronin-oem-fast.sh
-ExecStartPost=/opt/ronin-oem-teardown.sh
+ExecStart=/usr/local/sbin/ronin-oem-fast.sh
+ExecStartPost=/usr/local/sbin/ronin-oem-teardown.sh
 StandardOutput=journal
 Type=simple
 

@@ -6,7 +6,7 @@ After=oem-boot.service
 Type=simple
 User=admin
 WorkingDirectory=/home/admin
-ExecStart=/opt/setup/ronin-setup.sh
+ExecStart=/usr/local/sbin/ronin-setup.sh
 StandardOutput=journal
 
 [Install]
