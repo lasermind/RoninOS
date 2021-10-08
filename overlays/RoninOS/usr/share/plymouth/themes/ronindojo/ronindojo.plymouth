@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=RoninDojo
+Description=Manjaro Linux theme inspired by KDE Breeze
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/ronindojo
+ScriptFile=/usr/share/plymouth/themes/ronindojo/script
