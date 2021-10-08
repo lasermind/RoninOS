@@ -4,7 +4,7 @@ After=oem-boot.service
 
 [Service]
 Type=simple
-ExecStart=/opt/motd-setup.sh
+ExecStart=/usr/local/sbin/motd-setup.sh
 RemainAfterExit=true
 StandardOutput=journal
 
