@@ -19,4 +19,4 @@ Scripts/Install/install-system-setup.sh system
 Scripts/Install/install-dojo.sh dojo
 
 sudo rm /etc/sudoers.d/99-nopasswd
-systemctl disable ronin-setup.service
+sudo systemctl disable ronin-setup.service
