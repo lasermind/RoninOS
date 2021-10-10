@@ -59,6 +59,16 @@ create_oem_install() {
     echo "Configuration complete. Cleaning up..."
     rm /root/.bash_profile
 
+    # Avahi setup
+    sed -i 's/hosts: .*$/hosts: files mdns_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] dns mdns/' /etc/nsswitch.conf
+    sed -i 's/.*host-name=.*$/host-name=ronindojo/' /etc/avahi/avahi-daemon.conf
+    systemctl restart avahi-daemon
+
+    if ! systemctl is-enabled --quiet avahi-daemon; then
+        systemctl enable --quiet avahi-daemon
+    fi
+
+    # sshd setup
     sed -i -e "s/PermitRootLogin yes/#PermitRootLogin prohibit-password/" \
         -e "s/PermitEmptyPasswords yes/#PermitEmptyPasswords no/" /etc/ssh/sshd_config
 
