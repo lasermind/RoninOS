@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# FIX ME
+git config --global http.sslVerify false
+
 # Clone Repo
 git clone -b feat_plug_n_play https://code.samourai.io/ronindojo/RoninDojo
 
@@ -20,3 +23,5 @@ Scripts/Install/install-dojo.sh dojo
 
 sudo rm /etc/sudoers.d/99-nopasswd
 sudo systemctl disable ronin-setup.service
+
+git config --global http.sslVerify true
