@@ -333,6 +333,9 @@ create_rootfs_img() {
     #### Enable the RoninOS specific tweaks ###
     $NSPAWN $ROOTFS_IMG/rootfs_$ARCH systemctl enable --quiet dhcpcd sshd avahi-daemon oem-boot motd
 
+    # Enable RoninDojo splash theme
+    $NSPAWN $ROOTFS_IMG/rootfs_$ARCH plymouth-set-default-theme -R ronindojo
+
     info "Setting up system settings..."
     #system setup
     $NSPAWN $ROOTFS_IMG/rootfs_$ARCH update-ca-trust
