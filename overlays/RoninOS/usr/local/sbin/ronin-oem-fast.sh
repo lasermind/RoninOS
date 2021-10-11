@@ -11,27 +11,27 @@ HOSTNAME="RoninDojo"
 KEYMAP="us"
 
 create_oem_install() {
-    echo "Setting root password..."
+    # Setting root password
     chpasswd <<<"root:$ROOTPASSWORD"
 
-    echo "Adding user $USER..."
+    # Adding user $USER
     useradd -m -G wheel,sys,audio,input,video,storage,lp,network,users,power,docker -s /bin/bash "$USER" &>/dev/null
 
     # Set User and WorkingDirectory in ronin-setup.service unit file
     sed -i -e "s/User=.*$/User=${USER}/" \
         -e "s/WorkingDirectory=.*$/WorkingDirectory=\/home\/${USER}/" /usr/lib/systemd/system/ronin-setup.service
 
-    echo "Setting full name to $FULLNAME..."
+    # Setting full name to $FULLNAME
     chfn -f "$FULLNAME" "$USER" &>/dev/null
 
-    echo "Setting password for $USER..."
+    # Setting password for $USER
     chpasswd <<<"$USER:$PASSWORD"
 
-    echo "Setting timezone to $TIMEZONE..."
+    # Setting timezone to $TIMEZONE
     timedatectl set-timezone $TIMEZONE &>/dev/null
     timedatectl set-ntp true &>/dev/null
 
-    echo "Generating $LOCALE locale..."
+    # Generating $LOCALE locale
     sed -i "s/#$LOCALE/$LOCALE/" /etc/locale.gen &>/dev/null
     locale-gen &>/dev/null
     localectl set-locale $LOCALE &>/dev/null
@@ -44,18 +44,18 @@ create_oem_install() {
         fi
     fi
 
-    echo "Setting hostname to $HOSTNAME..."
+    # Setting hostname to $HOSTNAME
     hostnamectl set-hostname $HOSTNAME &>/dev/null
 
-    echo "Resizing partition..."
+    # Resizing partition
     resize-fs &>/dev/null
 
-    echo "Cleaning install for unwanted files..."
+    # Cleaning install for unwanted files
     sudo rm -rf /var/log/*
 
     loadkeys "$KEYMAP"
 
-    echo "Configuration complete. Cleaning up..."
+    # Configuration complete. Cleaning up
     rm /root/.bash_profile
 
     # Avahi setup
