@@ -21,7 +21,7 @@ Scripts/Install/install-system-setup.sh system
 # Run RoninDojo install
 Scripts/Install/install-dojo.sh dojo
 
-sudo rm /etc/sudoers.d/99-nopasswd
 sudo systemctl disable ronin-setup.service
+sudo rm /etc/sudoers.d/99-nopasswd
 
 git config --global http.sslVerify true
