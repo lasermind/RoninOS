@@ -27,6 +27,13 @@ create_oem_install() {
     # Setting password for $USER
     chpasswd <<<"$USER:$PASSWORD"
 
+    # Save Linux user credentials for UI access
+    mkdir -p /home/"${USER}"/.config/RoninDojo
+    cat <<EOF >/home/"${USER}"/.config/RoninDojo/info.json
+{"user":[{"name":"${USER}","password":"${PASSWORD}"},{"name":"root","password":"${ROOTPASSWORD}"}]}
+EOF
+    chown -R "${USER}":"${USER}" /home/"${USER}"/.config
+
     # Setting timezone to $TIMEZONE
     timedatectl set-timezone $TIMEZONE &>/dev/null
     timedatectl set-ntp true &>/dev/null
