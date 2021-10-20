@@ -13,13 +13,19 @@ cd "$HOME"/RoninDojo || exit
 . Scripts/functions.sh
 
 # Run main
-_main & export _pid="$!"
+_main &
+
+export _pid="$!"
 
 # Run system setup
 Scripts/Install/install-system-setup.sh system
 
 # Run RoninDojo install
 Scripts/Install/install-dojo.sh dojo
+
+# Restore getty
+sudo mv /usr/lib/systemd/system/getty\@.service.bak /usr/lib/systemd/system/getty\@.service
+sudo systemctl daemon-reload
 
 sudo systemctl disable ronin-setup.service
 sudo rm /etc/sudoers.d/99-nopasswd
