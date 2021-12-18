@@ -13,9 +13,7 @@ cd "$HOME"/RoninDojo || exit
 . Scripts/functions.sh
 
 # Run main
-_main &
-
-export _pid="$!"
+_main && export _pid="$!"
 
 # Run system setup
 Scripts/Install/install-system-setup.sh system
