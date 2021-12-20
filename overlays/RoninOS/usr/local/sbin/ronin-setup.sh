@@ -13,20 +13,20 @@ cd "$HOME"/RoninDojo || exit
 . Scripts/functions.sh
 
 # Run main
-_main && export _pid="$!"
+if _main; then
+    # Run system setup
+    Scripts/Install/install-system-setup.sh system
 
-# Run system setup
-Scripts/Install/install-system-setup.sh system
+    # Run RoninDojo install
+    Scripts/Install/install-dojo.sh dojo
 
-# Run RoninDojo install
-Scripts/Install/install-dojo.sh dojo
+    # Restore getty
+    sudo mv /usr/lib/systemd/system/getty\@.service.bak /usr/lib/systemd/system/getty\@.service
+    sudo rm /etc/systemd/system/getty\@tty1.service.d/override.conf
+    sudo systemctl daemon-reload
 
-# Restore getty
-sudo mv /usr/lib/systemd/system/getty\@.service.bak /usr/lib/systemd/system/getty\@.service
-sudo rm /etc/systemd/system/getty\@tty1.service.d/override.conf
-sudo systemctl daemon-reload
+    sudo systemctl disable ronin-setup.service
+    sudo rm /etc/sudoers.d/99-nopasswd
 
-sudo systemctl disable ronin-setup.service
-sudo rm /etc/sudoers.d/99-nopasswd
-
-git config --global http.sslVerify true
+    git config --global http.sslVerify true
+fi
