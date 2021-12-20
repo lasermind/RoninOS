@@ -329,7 +329,6 @@ create_rootfs_img() {
 
     info "Applying overlay for $EDITION edition..."
     cp -ap $PROFILES/arm-profiles/overlays/$EDITION/* $ROOTFS_IMG/rootfs_$ARCH/
-
     #### Enable the RoninOS specific tweaks ###
     $NSPAWN $ROOTFS_IMG/rootfs_$ARCH systemctl enable --quiet dhcpcd sshd avahi-daemon oem-boot motd
 
@@ -357,6 +356,50 @@ create_rootfs_img() {
             cp $LIBDIR/getty\@.service $ROOTFS_IMG/rootfs_$ARCH/usr/lib/systemd/system/getty\@.service
             ;;
     esac
+    
+    # Create OEM user
+    if [ -d $ROOTFS_IMG/rootfs_$ARCH/usr/share/calamares ]; then
+        echo "Creating OEM user..."
+        $NSPAWN $ROOTFS_IMG/rootfs_$ARCH groupadd -r autologin
+        $NSPAWN $ROOTFS_IMG/rootfs_$ARCH useradd -m -g users -u 984 -G wheel,sys,audio,input,video,storage,lp,network,users,power,autologin -p $(openssl passwd -6 oem) -s /bin/bash oem
+        $NSPAWN $ROOTFS_IMG/rootfs_$ARCH echo "oem ALL=(ALL) NOPASSWD: ALL" > $ROOTFS_IMG/rootfs_$ARCH/etc/sudoers.d/g_oem
+        SESSION=$(ls $ROOTFS_IMG/rootfs_$ARCH/usr/share/xsessions/ | head -1)
+        # For sddm based systems
+        if [ -f $ROOTFS_IMG/rootfs_$ARCH/usr/bin/sddm ]; then
+            $NSPAWN $ROOTFS_IMG/rootfs_$ARCH mkdir -p /etc/sddm.conf.d
+            echo "# Created by Manjaro ARM OEM Setup
+
+[Autologin]
+User=oem
+Session=$SESSION" > $ROOTFS_IMG/rootfs_$ARCH/etc/sddm.conf.d/90-autologin.conf
+        fi
+        # For lightdm based systems
+        if [ -f $ROOTFS_IMG/rootfs_$ARCH/usr/bin/lightdm ]; then
+            SESSION=$(echo ${SESSION%.*})
+            sed -i s/"#autologin-user="/"autologin-user=oem"/g $ROOTFS_IMG/rootfs_$ARCH/etc/lightdm/lightdm.conf
+            sed -i s/"#autologin-user-timeout=0"/"autologin-user-timeout=0"/g $ROOTFS_IMG/rootfs_$ARCH/etc/lightdm/lightdm.conf
+            if [[ "$EDITION" = "lxqt" ]]; then
+                sed -i s/"#autologin-session="/"autologin-session=lxqt"/g $ROOTFS_IMG/rootfs_$ARCH/etc/lightdm/lightdm.conf
+            elif [[ "$EDITION" = "i3" ]]; then
+                echo "autologin-user=oem
+autologin-user-timeout=0
+autologin-session=i3" >> $ROOTFS_IMG/rootfs_$ARCH/etc/lightdm/lightdm.conf
+                sed -i s/"# Autostart applications"/"# Autostart applications\nexec --no-startup-id sudo -E calamares"/g $ROOTFS_IMG/rootfs_$ARCH/home/oem/.i3/config
+            else
+                sed -i s/"#autologin-session="/"autologin-session=$SESSION"/g $ROOTFS_IMG/rootfs_$ARCH/etc/lightdm/lightdm.conf
+            fi
+        fi
+        # For greetd based Sway edition
+        if [ -f $ROOTFS_IMG/rootfs_$ARCH/usr/bin/sway ]; then
+            echo '[initial_session]
+command = "sway --config /etc/greetd/oem-setup"
+user = "oem"' >> $ROOTFS_IMG/rootfs_$ARCH/etc/greetd/config.toml
+        fi
+        # For Gnome edition
+        if [ -f $ROOTFS_IMG/rootfs_$ARCH/usr/bin/gdm ]; then
+            sed -i s/"\[daemon\]"/"\[daemon\]\nAutomaticLogin=oem\nAutomaticLoginEnable=True"/g $ROOTFS_IMG/rootfs_$ARCH/etc/gdm/custom.conf
+        fi
+    fi
     
     # Lomiri services Temporary in function until it is moved to an individual package.
     if [[ "$EDITION" = "lomiri" ]]; then
@@ -402,8 +445,8 @@ create_rootfs_img() {
             sed -i 's/setenv bootargs "/&rootflags=subvol=@ /' $ROOTFS_IMG/rootfs_$ARCH/boot/boot.ini
         elif [ -f $ROOTFS_IMG/rootfs_$ARCH/boot/uEnv.ini ]; then
             sed -i 's/setenv bootargs "/&rootflags=subvol=@ /' $ROOTFS_IMG/rootfs_$ARCH/boot/uEnv.ini
-        elif [ -f $ROOTFS_IMG/rootfs_$ARCH/boot/cmdline.txt ]; then
-            sed -i 's/^/rootflags=subvol=@ rootfstype=btrfs /' $ROOTFS_IMG/rootfs_$ARCH/boot/cmdline.txt
+        #elif [ -f $ROOTFS_IMG/rootfs_$ARCH/boot/cmdline.txt ]; then
+        #    sed -i 's/^/rootflags=subvol=@ rootfstype=btrfs /' $ROOTFS_IMG/rootfs_$ARCH/boot/cmdline.txt
         elif [ -f $ROOTFS_IMG/rootfs_$ARCH/boot/boot.txt ]; then
             sed -i 's/setenv bootargs/& rootflags=subvol=@/' $ROOTFS_IMG/rootfs_$ARCH/boot/boot.txt
             $NSPAWN $ROOTFS_IMG/rootfs_$ARCH mkimage -A arm -O linux -T script -C none -n "U-Boot boot script" -d /boot/boot.txt /boot/boot.scr
@@ -440,7 +483,8 @@ create_rootfs_img() {
     info "Cleaning rootfs for unwanted files..."
     prune_cache
     rm $ROOTFS_IMG/rootfs_$ARCH/usr/bin/qemu-aarch64-static
-    rm -rf $ROOTFS_IMG/rootfs_$ARCH/var/log/*
+    rm -f $ROOTFS_IMG/rootfs_$ARCH/var/log/* 1> /dev/null 2>&1
+    rm -rf $ROOTFS_IMG/rootfs_$ARCH/var/log/journal/*
     rm -rf $ROOTFS_IMG/rootfs_$ARCH/etc/*.pacnew
     rm -rf $ROOTFS_IMG/rootfs_$ARCH/usr/lib/systemd/system/systemd-firstboot.service
     rm -rf $ROOTFS_IMG/rootfs_$ARCH/etc/machine-id
@@ -728,14 +772,42 @@ create_img() {
             sed -i "s/LABEL=ROOT_MNJRO/PARTUUID=$ROOT_PART/g" $TMPDIR/boot/boot.ini
         elif [ -f $TMPDIR/boot/uEnv.ini ]; then
             sed -i "s/LABEL=ROOT_MNJRO/PARTUUID=$ROOT_PART/g" $TMPDIR/boot/uEnv.ini
-        elif [ -f $TMPDIR/boot/cmdline.txt ]; then
-            sed -i "s/PARTUUID=/PARTUUID=$ROOT_PART/g" $TMPDIR/boot/cmdline.txt
+        #elif [ -f $TMPDIR/boot/cmdline.txt ]; then
+        #    sed -i "s/PARTUUID=/PARTUUID=$ROOT_PART/g" $TMPDIR/boot/cmdline.txt
         #elif [ -f $TMPDIR/boot/boot.txt ]; then
         #   sed -i "s/LABEL=ROOT_MNJRO/PARTUUID=$ROOT_PART/g" $TMPDIR/boot/boot.txt
         #   cd $TMPDIR/boot
         #   ./mkscr
         #   cd $HOME
     fi
+    
+    if [[ "$DEVICE" = "rpi4" ]] && [[ "$FILESYSTEM" = "btrfs" ]]; then
+        echo "===> Installing default btrfs RPi cmdline.txt /boot..."
+        echo "rootflags=subvol=@ root=PARTUUID=$ROOT_PART rw rootwait console=serial0,115200 console=tty3 selinux=0 quiet splash plymouth.ignore-serial-consoles smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=serial0,115200 usbhid.mousepoll=8 audit=0" >  $TMPDIR/boot/cmdline.txt
+    elif [[ "$DEVICE" = "rpi4" ]]; then
+        echo "===> Installing default ext4 RPi cmdline.txt /boot..."
+        echo "root=PARTUUID=$ROOT_PART rw rootwait console=serial0,115200 console=tty3 selinux=0 quiet splash plymouth.ignore-serial-consoles smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=serial0,115200 usbhid.mousepoll=8 audit=0" >  $TMPDIR/boot/cmdline.txt
+    fi
+    if [[ "$DEVICE" = "rpi4" ]]; then
+        echo "===> Installing default config.txt file to /boot/..."
+        echo "# See /boot/overlays/README for all available options" > $TMPDIR/boot/config.txt
+        echo "" >> $TMPDIR/boot/config.txt
+        echo "#gpu_mem=64" >> $TMPDIR/boot/config.txt
+        echo "initramfs initramfs-linux.img followkernel" >> $TMPDIR/boot/config.txt
+        echo "kernel=kernel8.img" >> $TMPDIR/boot/config.txt
+        echo "arm_64bit=1" >> $TMPDIR/boot/config.txt
+        echo "disable_overscan=1" >> $TMPDIR/boot/config.txt
+        echo "" >> $TMPDIR/boot/config.txt
+        echo "#enable sound" >> $TMPDIR/boot/config.txt
+        echo "dtparam=audio=on" >> $TMPDIR/boot/config.txt
+        echo "#hdmi_drive=2" >> $TMPDIR/boot/config.txt
+        echo "" >> $TMPDIR/boot/config.txt
+        echo "#enable vc4" >> $TMPDIR/boot/config.txt
+        echo "dtoverlay=vc4-fkms-v3d" >> $TMPDIR/boot/config.txt
+        echo "max_framebuffers=2"  >> $TMPDIR/boot/config.txt
+        echo "disable_splash=1" >> $TMPDIR/boot/config.txt
+    fi
+    
     if [[ "$FILESYSTEM" = "btrfs" ]]; then
         sed -i "s/LABEL=ROOT_MNJRO/PARTUUID=$ROOT_PART/g" $TMPDIR/root/etc/fstab
     else
