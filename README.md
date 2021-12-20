@@ -7,16 +7,13 @@ To replicate this build you must do the following:
 5) Give root permissions to all files (the default setting of the manjaro-arm-tools)
 6) Run `sudo buildarmimg -d rockpro64 -e RoninOS`
 
-Notes:
+File structure:
 
-- The functions.sh contains modifications specific for RoninOS under the buildrootfs function. This mainly is used to enable oem-boot.service to run off boot.
-- Overlay contains files to make the setup more efficient but most importantly are the files in /opt/
-  - a git repo of RoninDojo
-  - the ronin-oem-fast.sh (this is a modification of the manjaro-arm oem script to ensure other services are enabled and user is setup during boot. Then reboot the device.
-    - this is where the username, passwd, locale, keyboard, etc
-    - perhaps a randomly generated username,passwd is created and stored in a tmp dir until the user changes on login to UI.
-  - In /opt/setup is the ronin-setup.sh:
-     - This script is what gives and later removes the permissions of admin user
-     - Then runs the _main function from ronin, install-system.sh, and install-dojo.sh
-
-- Currently error with installing RoninUI during setup.
+/tool-libs/functions.sh:
+  - Contains modifications specific for RoninOS under the buildrootfs function. This mainly is used to enable oem-boot.service to run off boot.
+/overlays/RoninOS:
+  - Contains files to make the setup more efficient but most importantly are the files located in /usr/local/sbin
+/overlays/usr/local/sbin/ronin-oem-fast.sh:
+  - This is a modification of the manjaro-arm oem script to ensure other services are enabled and user is setup during boot. This is also where the username, passwd, locale, keyboard are setup. randomly generated username & passwords are created and stored in a tmp file located at /home/"${USER}"/.config/RoninDojo/info.json for use with UI initial setup.
+/overlays/usr/local/sbin/ronin-setup.sh:
+  - Automates the install of RoninDojo to allow end user to just access RoninDojo UI during install/
