@@ -4,7 +4,7 @@
 git config --global http.sslVerify false
 
 # Clone Repo
-git clone -b feat_plug_n_play https://code.samourai.io/ronindojo/RoninDojo
+git clone https://code.samourai.io/ronindojo/RoninDojo
 
 # Source files
 cd "$HOME"/RoninDojo || exit
