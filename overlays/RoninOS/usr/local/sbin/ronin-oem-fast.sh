@@ -1,11 +1,11 @@
 #!/bin/bash
 
 TMPDIR=/var/tmp
-USER="ronindojo-$(tr -dc 'a-z0-9' </dev/urandom | head -c'4')"
+USER="ronindojo"
 PASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
 ROOTPASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
 FULLNAME="RoninDojo"
-TIMEZONE="UTF-8"
+TIMEZONE="UTC"
 LOCALE="en_US.UTF-8"
 HOSTNAME="RoninDojo"
 KEYMAP="us"
