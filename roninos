@@ -1,0 +1,32 @@
+#!/bin/bash
+
+install=false
+
+_generate_images() {
+	for i in on2 quartz64-bsp rpi4 rock64 rockpi4b rockpi4c rockpro64; do
+		sudo buildarmimg -d "$i" -e RoninOS
+	done
+
+	sudo bash -c "cd /var/cache/manjaro-arm-tools/img" || exit 1
+	for i in Manjaro-ARM-RoninOS-*.xz; do
+		sudo bash -c "sha256sum $i >sum"
+		test -f "${i}".asc && sudo rm "${i}".asc
+		gpg -u "${user:-gpg@ronindojo.io}" --output "${i}".asc --pinentry-mode=loopback --batch --passphrase "$(<"$HOME"/.gpg-passwd)" --clearsign sum
+		sudo rm sum
+	done
+	cd - || exit 1
+
+	echo "Completed, files located at /var/cache/manjaro-arm-tools/img directory"
+}
+
+while [ $# -gt 0 ]; do
+	case "$1" in
+	--generate)
+		install=true;;
+	--user=*)
+		user=${1#*=}
+	esac
+	shift
+done
+
+if $install; then _generate_images; fi
