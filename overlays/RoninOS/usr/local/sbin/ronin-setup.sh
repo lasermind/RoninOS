@@ -4,7 +4,7 @@
 git config --global http.sslVerify false
 
 # Clone Repo
-git clone https://code.samourai.io/ronindojo/RoninDojo
+git clone -b master https://code.samourai.io/ronindojo/RoninDojo
 
 # Source files
 cd "$HOME"/RoninDojo || exit
