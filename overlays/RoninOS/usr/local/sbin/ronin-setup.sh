@@ -29,4 +29,5 @@ if _main; then
     sudo rm /etc/sudoers.d/99-nopasswd
 
     git config --global http.sslVerify true
+    pm2 resurrect
 fi
