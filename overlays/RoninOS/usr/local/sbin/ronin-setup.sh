@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# FIX ME
-git config --global http.sslVerify false
-
 # Clone Repo
 git clone -b master https://code.samourai.io/ronindojo/RoninDojo
 
@@ -28,6 +25,5 @@ if _main; then
     sudo systemctl disable ronin-setup.service
     sudo rm /etc/sudoers.d/99-nopasswd
 
-    git config --global http.sslVerify true
     pm2 resurrect
 fi
