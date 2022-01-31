@@ -11,5 +11,5 @@ install:
 	sudo chmod +x /usr/local/sbin/roninos;\
 
 uninstall:
-	sudo rm -rf /usr/share/manjaro-arm-tools/profiles/arm-profiles/{services,editions,overlays}/RoninOS;\
-	if hash buildarmimg 2>/dev/null; then sudo pacman -R --noconfirm manjaro-arm-tools; fi
+	if hash buildarmimg 2>/dev/null; then sudo pacman -R --noconfirm manjaro-arm-tools; fi;\
+	sudo rm -rf /usr/share/manjaro-arm-tools;\
