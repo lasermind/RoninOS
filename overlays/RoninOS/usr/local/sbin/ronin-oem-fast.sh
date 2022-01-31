@@ -97,7 +97,7 @@ fi
 
 create_oem_install
 
-echo -e "domain .local\nnameserver 8.8.8.8\nnameserver 8.8.4.4\nnameserver 1.1.1.1" >> /etc/resolv.conf
+echo -e "domain .local\nnameserver 8.8.8.8\nnameserver 8.8.4.4\nnameserver 1.1.1.1\nnameserver 1.0.0.1" >> /etc/resolv.conf
 
 echo "OEM complete"
 cat /etc/motd
