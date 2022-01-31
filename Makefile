@@ -2,7 +2,7 @@ install:
 	if [ ! -d /opt/RoninOS/repo ]; then \
 		if ! hash buildarmimg 2>/dev/null; then sudo pacman -qS --noconfirm manjaro-arm-tools; fi;\
 		sudo mkdir -p /opt/RoninOS/repo;\
-		git clone https://code.samourai.io/ronindojo/RoninOS /opt/RoninOS/repo/RoninOS;\
+		sudo git clone https://code.samourai.io/ronindojo/RoninOS /opt/RoninOS/repo/RoninOS;\
 		sudo cp -f /opt/RoninOS/repo/RoninOS/tools-lib/functions.sh /usr/share/manjaro-arm-tools/lib/;\
 		sudo cp -f /opt/RoninOS/repo/RoninOS/editions/RoninOS /usr/share/manjaro-arm-tools/profiles/arm-profiles/editions/;\
 		sudo cp -f /opt/RoninOS/repo/RoninOS/services/RoninOS /usr/share/manjaro-arm-tools/profiles/arm-profiles/services/;\
@@ -11,7 +11,7 @@ install:
 		sudo chmod +x /usr/local/sbin/roninos;\
 	else \
 		sudo bash -c "cd /opt/RoninOS/repo/RoninOS";\
-		git pull -r;\
+		sudo git pull -r;\
 	fi
 
 uninstall:
