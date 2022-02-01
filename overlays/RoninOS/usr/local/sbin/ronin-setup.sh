@@ -23,5 +23,6 @@ if _main; then
     sudo systemctl daemon-reload
 
     sudo systemctl disable ronin-setup.service
+    sudo systemctl enable ronin-post.service
     sudo rm /etc/sudoers.d/99-nopasswd
 fi
