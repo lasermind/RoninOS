@@ -1,0 +1,14 @@
+[Unit]
+Description=Post Setup RoninDojo
+After=ronin-setup.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=ronindojo
+WorkingDirectory=/home/ronindojo
+ExecStart=/usr/bin/pm2 resurrect
+StandardOutput=journal
+
+[Install]
+WantedBy=multi-user.target
