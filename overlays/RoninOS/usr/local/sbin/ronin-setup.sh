@@ -24,6 +24,4 @@ if _main; then
 
     sudo systemctl disable ronin-setup.service
     sudo rm /etc/sudoers.d/99-nopasswd
-
-    pm2 resurrect
 fi
