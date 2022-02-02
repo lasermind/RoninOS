@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while systemctl is-active --quiet ronin-setup.service == true
+while systemctl is-active --quiet ronin-setup.service
 do
     echo "Dojo still installing..."
     sleep 30s
