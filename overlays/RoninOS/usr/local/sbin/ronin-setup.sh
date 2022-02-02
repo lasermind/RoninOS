@@ -22,7 +22,6 @@ if _main; then
     sudo rm /etc/systemd/system/getty\@tty1.service.d/override.conf
     sudo systemctl daemon-reload
 
-    sudo systemctl disable ronin-setup.service
-    sudo systemctl enable ronin-post.service
+    sudo systemctl disable --now ronin-setup.service
     sudo rm /etc/sudoers.d/99-nopasswd
 fi
