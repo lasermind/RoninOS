@@ -39,3 +39,4 @@ jq
 python-pipenv
 gptfdisk
 gcc
+nvme-cli
