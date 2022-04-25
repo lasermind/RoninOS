@@ -8,3 +8,4 @@ bootsplash-show-on-shutdown.service
 avahi-daemon.service
 oem-boot.service
 motd.service
+fstrim.service
