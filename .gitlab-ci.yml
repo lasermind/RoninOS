@@ -1,0 +1,23 @@
+# see https://github.com/manjaro/manjaro-docker
+# https://hub.docker.com/r/manjarolinux/base
+
+default:
+  image: manjarolinux/base:latest
+
+stages:
+  - experiment
+
+experiment:
+  stage: experiment
+  only:
+    refs:
+      - branches
+  variables:
+  script:
+    - set -ex
+    - pwd
+    - ls -la
+    - pacman -qS --noconfirm make wget
+    - make install
+    - ./roninos --generate
+    - echo "JOB DONE"
