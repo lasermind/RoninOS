@@ -2,22 +2,62 @@
 # https://hub.docker.com/r/manjarolinux/base
 
 default:
-  image: manjarolinux/base:latest
+  #image: ubuntu:jammy
+  image: docker:20.10.16
+
+services:
+  - docker:20.10.16-dind
 
 stages:
   - experiment
 
 experiment:
+  tags:
+      - privileged
   stage: experiment
   only:
     refs:
       - branches
   variables:
+    #DOCKER_HOST: tcp://localhost:2375/
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+
   script:
+
+    #initial
     - set -ex
     - pwd
     - ls -la
-    - pacman -qS --noconfirm make wget
-    - make install
-    - ./roninos --generate
-    - echo "JOB DONE"
+
+    #mandatories
+    # - apt update
+    # - apt-get install -y -qq wget git uuid-runtime
+    - apk add git bash
+    
+    #installing docker
+    # - apt-get remove docker docker.io containerd runc
+    # - apt-get install -y -qq ca-certificates curl gnupg
+    # - install -m 0755 -d /etc/apt/keyrings
+    # - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    # - chmod a+r /etc/apt/keyrings/docker.gpg
+    # - echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+    # - apt-get update
+    # - apt-get install -y -qq docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    # - docker run -v /var/run/docker.sock:/var/run/docker.sock -ti docker
+    - docker run hello-world
+
+    #generate the image
+    - cd ~
+    - git clone --depth=1 --branch=main https://github.com/armbian/build  
+    #- cp -Rv ~/RoninOS/customize-image.sh ~/build/userpatches/customize-image.sh
+    - cd ~/build 
+    #https://github.com/armbian/build/tags
+    - git fetch --tags
+    - git checkout 23.02.0-trunk.0256
+    - ./compile.sh docker COMPRESSION="gz, sha"
+    
+    #finalize
+    - echo "Completed"
