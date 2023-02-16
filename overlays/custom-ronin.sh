@@ -7,7 +7,7 @@
 #####################################################################################################
 
 
-git clone https://code.samourai.io/ronindojo/RoninOS.git /tmp
+git clone https://code.samourai.io/ronindojo/RoninOS.git /tmp/RoninOS
 cp -Rv /tmp/RoninOS/overlays/RoninOS/usr/* /usr
 cp -Rv /tmp/RoninOS/overlays/RoninOS/etc/* /etc
 ### sanity check ###
