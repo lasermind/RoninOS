@@ -12,7 +12,7 @@ cp -Rv /tmp/RoninOS/overlays/RoninOS/usr/* /usr
 cp -Rv /tmp/RoninOS/overlays/RoninOS/etc/* /etc
 ### sanity check ###
 # TODO: Remove this after successful runs.
-if ! /usr/lib/systemd/system/oem-boot.service; then
+if [ ! -f /usr/lib/systemd/system/oem-boot.service ]; then
     echo "oem-boot.service is missing..."
     echo "Still broken.. exiting"
     exit 1;
