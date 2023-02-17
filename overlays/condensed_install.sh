@@ -145,6 +145,7 @@ main(){
         _prep_install
         _create_oem_install
         _service_checks
+        systemctl disable --quiet oem-fast.service
         systemctl enable --quiet ronin-setup.service
         systemctl enable --quiet ronin-post.service
         echo "Setup is complete"
