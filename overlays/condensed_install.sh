@@ -101,12 +101,12 @@ _service_checks(){
 }
 
 _prep_install(){
-    ##### node
+    # install nodejs
     curl -sL https://deb.nodesource.com/setup_16.x | bash -
     apt-get update
     apt-get install -y nodejs
 
-    ##### docker
+    # install docker
     mkdir -m 0755 -p /etc/apt/keyrings
     curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     echo \
@@ -114,20 +114,19 @@ _prep_install(){
     $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     apt-get update
-    apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-    ##### docker-compose
+    # install docker-compose
     curl -L https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-linux-aarch64 -o /usr/bin/docker-compose
     chmod +x /usr/bin/docker-compose
 
-    ##### pm2
+    # install pm2
     curl -sL https://raw.githubusercontent.com/Unitech/pm2/master/packager/setup.deb.sh | sudo -E bash -
-    npm install pm2 -g
 }
 
 main(){
     # install dependencies
-    apt-get install git avahi-daemon nginx openjdk-11-jdk tor fail2ban net-tools htop unzip wget ufw rsync jq python3 python3-pip pipenv gdisk gcc curl apparmor ca-certificates gnupg lsb-release
+    apt-get install -y git avahi-daemon nginx openjdk-11-jdk tor fail2ban net-tools htop unzip wget ufw rsync jq python3 python3-pip pipenv gdisk gcc curl apparmor ca-certificates gnupg lsb-release
     
     # clone the original RoninOS
     git clone -b feature/debian https://code.samourai.io/ronindojo/RoninOS.git /tmp/RoninOS
