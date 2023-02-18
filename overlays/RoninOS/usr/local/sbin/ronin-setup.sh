@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Clone Repo
-git clone -b master https://code.samourai.io/ronindojo/RoninDojo
+git clone -b feature/debian_mode https://code.samourai.io/ronindojo/RoninDojo
 
 # Source files
 cd "$HOME"/RoninDojo || exit
