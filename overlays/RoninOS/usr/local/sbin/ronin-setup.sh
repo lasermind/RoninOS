@@ -23,5 +23,5 @@ if _main; then
     sudo systemctl daemon-reload
 
     sudo systemctl disable ronin-setup.service
-    sudo rm /etc/sudoers.d/99-nopasswd
+    sudo rm /etc/sudoers.d/ronindojo.override
 fi
