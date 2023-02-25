@@ -21,7 +21,6 @@ if _main; then
     sudo mv /usr/lib/systemd/system/getty\@.service.bak /usr/lib/systemd/system/getty\@.service
     sudo rm /etc/systemd/system/getty\@tty1.service.d/override.conf
     sudo systemctl daemon-reload
-    sed -i '/ronindojo/s/ALL) NOPASSWD:ALL/ALL) ALL/' /etc/sudoers
     sudo systemctl disable ronin-setup.service
     sudo systemctl enable --now ronin-post.service
 fi
