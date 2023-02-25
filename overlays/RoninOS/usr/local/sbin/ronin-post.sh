@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sed -i '/ronindojo/s/ALL) NOPASSWD:ALL/ALL) ALL/' /etc/sudoers
+
 while systemctl is-active --quiet ronin-setup.service
 do
     echo "Dojo still installing..."
