@@ -1,6 +1,6 @@
 [Unit]
 Description=Post RoninDojo Setup
-After=oem-boot.service network-online.target
+After=ronin-setup.service network-online.target
 
 [Service]
 Type=simple
