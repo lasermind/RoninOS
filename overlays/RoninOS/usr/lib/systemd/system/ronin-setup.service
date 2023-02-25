@@ -1,6 +1,6 @@
 [Unit]
 Description=Setup RoninDojo
-After=network-online.target
+After=armbian-firstrun.service
 Wants=network-online.target
 
 [Service]
