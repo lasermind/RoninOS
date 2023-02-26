@@ -1,7 +1,7 @@
 [Unit]
 Description=Setup RoninDojo
-After=network-online.target
-Wants=network-online.target
+After=network-online.target 
+Wants=oem-boot.service avahi-daemon.service
 
 [Service]
 Type=simple
