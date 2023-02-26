@@ -1,7 +1,6 @@
 [Unit]
 Description=Ronin OEM Fast
-After=armbian-firstrun.service
-Wants=network-online.target
+After=armbian-firstrun.service network-online.target
 
 [Service]
 Type=simple
