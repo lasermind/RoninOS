@@ -1,7 +1,7 @@
 [Unit]
 Description=Setup RoninDojo
-After=network-online.target 
-Wants=oem-boot.service avahi-daemon.service
+After=avahi-daemon.service
+Wants=oem-boot.service network-online.target
 
 [Service]
 Type=simple
@@ -9,7 +9,7 @@ User=admin
 WorkingDirectory=/home/admin
 ExecStart=/usr/local/sbin/ronin-setup.sh
 ExecStop=/usr/bin/pm2 resurrect
-StandardOutput=journal
+StandardOutput=file:/home/ronindojo/.logs/setup.logs
 RemainAfterExit=true
 
 [Install]
