@@ -6,7 +6,7 @@ After=ronin-setup.service network-online.target
 Type=simple
 User=ronindojo
 ExecStart=/usr/local/sbin/ronin-post.sh
-StandardOutput=journal
+StandardOutput=file:/home/ronindojo/.logs/post.logs
 
 [Install]
 WantedBy=multi-user.target
