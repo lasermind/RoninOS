@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Clone Repo
-git clone -b feature/debian_mode https://code.samourai.io/ronindojo/RoninDojo
-
 # Source files
 cd "$HOME"/RoninDojo || exit
 
