@@ -1,6 +1,7 @@
 [Unit]
 Description=Post RoninDojo Setup
-After=ronin-setup.service network-online.target
+After=ronin-setup.service
+Requires=ronin-setup.service
 
 [Service]
 Type=simple
