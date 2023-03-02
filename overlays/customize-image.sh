@@ -109,15 +109,25 @@ EOF
 }
 
 _service_checks(){  
-    systemctl enable tor
+    if ! systemctl is-enabled tor.service; then
+        systemctl enable tor.service
+    fi
 
     if ! systemctl is-enabled --quiet avahi-daemon.service; then
         systemctl disable systemd-resolved.service &>/dev/null
-        systemctl enable --quiet avahi-daemon.service
+        systemctl enable avahi-daemon.service
     fi
 
     if ! systemctl is-enabled motd.service; then
-        systemctl enable --quiet motd.service
+        systemctl enable motd.service
+    fi
+    
+    if ! systemctl is-enabled ronin-setup.service; then
+        systemctl enable ronin-setup.service
+    fi
+
+    if ! systemctl is-enabled ronin-post.service; then
+        systemctl enable ronin-post.service
     fi
 }
 
@@ -145,7 +155,7 @@ _prep_install(){
     npm install pm2 -g
 
     # Clone Repo
-    git clone -b feature/debian_build_more https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
+    sudo -u "ronindojo" git clone -b feature/debian_build_more https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
 }
 
 _install_ronin_ui(){
@@ -161,40 +171,40 @@ _install_ronin_ui(){
     _install_pkg_if_missing "nginx"
     _install_pkg_if_missing "avahi-daemon"
 
-    sudo npm i -g pnpm@7 &>/dev/null
+    npm i -g pnpm@7 &>/dev/null
 
     #sudo npm install pm2 -g
 
-    test -d "${ronin_ui_path}" || mkdir "${ronin_ui_path}"
-    cd "${ronin_ui_path}" || exit
+    sudo -u ronindojo  test -d /home/ronindojo/Ronin-UI || mkdir /home/ronindojo/Ronin-UI
+    sudo -u ronindojo  cd /home/ronindojo/Ronin-UI || exit
 
-    wget -q "${roninui_version_file}" -O /tmp/version.json 2>/dev/null
+    sudo -u ronindojo  wget -q "${roninui_version_file}" -O /tmp/version.json 2>/dev/null
 
     _file=$(jq -r .file /tmp/version.json)
     _shasum=$(jq -r .sha256 /tmp/version.json)
 
-    wget -q https://ronindojo.io/downloads/RoninUI/"$_file" 2>/dev/null
+    sudo -u ronindojo wget -q https://ronindojo.io/downloads/RoninUI/"$_file" 2>/dev/null
 
     if ! echo "${_shasum} ${_file}" | sha256sum --check --status; then
         _bad_shasum=$(sha256sum ${_file})
         _print_error_message "Ronin UI archive verification failed! Valid sum is ${_shasum}, got ${_bad_shasum} instead..."
     fi
       
-    tar xzf "$_file"
+    sudo -u ronindojo tar xzf "$_file"
 
     rm "$_file" /tmp/version.json
 
         # Mark Ronin UI initialized if necessary
         if [ -e "${ronin_ui_init_file}" ]; then
-          echo -e "{\"initialized\": true}\n" > ronin-ui.dat
+            sudo -u ronindojo echo -e "{\"initialized\": true}\n" > ronin-ui.dat
         fi
 
         # Generate .env file
-        echo "JWT_SECRET=$gui_jwt" > .env
-        echo "NEXT_TELEMETRY_DISABLED=1" >> .env
+        sudo -u ronindojo echo "JWT_SECRET=$gui_jwt" > .env
+        sudo -u ronindojo echo "NEXT_TELEMETRY_DISABLED=1" >> .env
 
     if [ "${roninui_version_staging}" = true ] ; then
-        echo -e "VERSION_CHECK=staging\n" >> .env
+        sudo -u ronindojo echo -e "VERSION_CHECK=staging\n" >> .env
     fi
 
     _print_message "Performing pnpm install, please wait..."
@@ -243,7 +253,6 @@ main(){
         echo "Setup service is PRESENT! Keep going!"
         _create_oem_install
         _prep_install
-        _service_checks
         _prep_tor
         usermod -aG pm2 ronindojo
         mkdir -p /usr/share/nginx/logs
@@ -251,8 +260,7 @@ main(){
         _install_ronin_ui
         usermod -aG docker ronindojo
         systemctl enable oem-boot.service
-        systemctl enable ronin-setup.service
-        systemctl enable ronin-post.service
+        _service_checks
         echo "Setup is complete"
     fi
 }
