@@ -145,7 +145,7 @@ _prep_install(){
     npm install pm2 -g
 
     # Clone Repo
-    git clone -b feature/debian_mode https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
+    git clone -b feature/debian_build_more https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
 }
 
 _install_ronin_ui(){
