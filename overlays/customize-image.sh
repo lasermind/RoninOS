@@ -155,72 +155,90 @@ _prep_install(){
     npm install pm2 -g
 
     # Clone Repo
-    sudo -u "ronindojo" git clone -b feature/debian_build_more https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
+    git clone -b feature/debian_build_more https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
+    chown -R ronindojo:ronindojo /home/ronindojo/RoninDojo
+}
+
+_ronin_ui_avahi_service() {
+    if [ ! -f /etc/avahi/services/http.service ]; then
+        tee "/etc/avahi/services/http.service" <<EOF >/dev/null
+<?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<!-- This advertises the RoninDojo vhost -->
+<service-group>
+ <name replace-wildcards="yes">%h Web Application</name>
+  <service>
+   <type>_http._tcp</type>
+   <port>80</port>
+  </service>
+</service-group>
+EOF
+
+    fi
+
+    sed -i 's/hosts: .*$/hosts: files mdns_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] dns mdns/' /etc/nsswitch.conf
+
+    if ! grep -q "host-name=ronindojo" /etc/avahi/avahi-daemon.conf; then
+        sed -i 's/.*host-name=.*$/host-name=ronindojo/' /etc/avahi/avahi-daemon.conf
+    fi
+
+    if ! systemctl is-enabled --quiet avahi-daemon; then
+        systemctl enable --quiet avahi-daemon
+    fi
+
+    return 0
+}
+
+
+_rand_passwd() {
+    local _length
+    _length="${1:-16}"
+
+    tr -dc 'a-zA-Z0-9' </dev/urandom | head -c"${_length}"
 }
 
 _install_ronin_ui(){
-    . /home/ronindojo/RoninDojo/Scripts/defaults.sh
-    . /home/ronindojo/RoninDojo/Scripts/functions.sh
-    . /home/ronindojo/RoninDojo/Scripts/generated-credentials.sh
 
+    gui_api=$(_rand_passwd 69)
+    gui_jwt=$(_rand_passwd 69)
 
     cd /home/ronindojo || exit
-
-    _print_message "Checking package dependencies for Ronin UI..."
-    _sleep
-
-    _install_pkg_if_missing "nginx"
-    _install_pkg_if_missing "avahi-daemon"
 
     npm i -g pnpm@7 &>/dev/null
 
     #sudo npm install pm2 -g
 
-    sudo -u ronindojo  test -d /home/ronindojo/Ronin-UI || mkdir /home/ronindojo/Ronin-UI
-    sudo -u ronindojo  cd /home/ronindojo/Ronin-UI || exit
+    test -d /home/ronindojo/Ronin-UI || mkdir /home/ronindojo/Ronin-UI
+    cd /home/ronindojo/Ronin-UI || exit
 
-    sudo -u ronindojo  wget -q "${roninui_version_file}" -O /tmp/version.json 2>/dev/null
+    wget -q "${roninui_version_file}" -O /tmp/version.json 2>/dev/null
 
     _file=$(jq -r .file /tmp/version.json)
     _shasum=$(jq -r .sha256 /tmp/version.json)
 
-    sudo -u ronindojo wget -q https://ronindojo.io/downloads/RoninUI/"$_file" 2>/dev/null
+    wget -q https://ronindojo.io/downloads/RoninUI/"$_file" 2>/dev/null
 
     if ! echo "${_shasum} ${_file}" | sha256sum --check --status; then
         _bad_shasum=$(sha256sum ${_file})
         _print_error_message "Ronin UI archive verification failed! Valid sum is ${_shasum}, got ${_bad_shasum} instead..."
     fi
       
-    sudo -u ronindojo tar xzf "$_file"
+    tar xzf "$_file"
 
     rm "$_file" /tmp/version.json
 
-        # Mark Ronin UI initialized if necessary
-        if [ -e "${ronin_ui_init_file}" ]; then
-            sudo -u ronindojo echo -e "{\"initialized\": true}\n" > ronin-ui.dat
-        fi
-
-        # Generate .env file
-        sudo -u ronindojo echo "JWT_SECRET=$gui_jwt" > .env
-        sudo -u ronindojo echo "NEXT_TELEMETRY_DISABLED=1" >> .env
-
-    if [ "${roninui_version_staging}" = true ] ; then
-        sudo -u ronindojo echo -e "VERSION_CHECK=staging\n" >> .env
+    # Mark Ronin UI initialized if necessary
+    if [ -e "${ronin_ui_init_file}" ]; then
+        echo -e "{\"initialized\": true}\n" > ronin-ui.dat
     fi
 
-    _print_message "Performing pnpm install, please wait..."
+    # Generate .env file
+    echo "JWT_SECRET=$gui_jwt" > .env
+    echo "NEXT_TELEMETRY_DISABLED=1" >> .env
 
-    sudo -u ronindojo pnpm install --prod &>/dev/null || { printf "\n%s***\nRonin UI pnpm install failed...\n***%s\n" "${red}" "${nc}";exit; }
-
-    _print_message "Performing Next start, please wait..."
-
-    sudo -u ronindojo pm2 start pm2.config.js
-    sudo -u ronindojo pm2 save
-    sudo -u ronindojo pm2 startup && env PATH="$PATH:/usr/bin" /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "ronindojo" --hp "/home/ronindojo" &>/dev/null
-
-    _ronin_ui_setup_tor
-
-    _ronin_ui_vhost
+    if [ "${roninui_version_staging}" = true ] ; then
+        echo -e "VERSION_CHECK=staging\n" >> .env
+    fi
 
     _ronin_ui_avahi_service
 
@@ -231,6 +249,12 @@ _prep_tor(){
 	mkdir -p /mnt/usb/tor
 	chown -R tor:tor /mnt/usb/tor
 	sed -i '$a\User tor\nDataDirectory /mnt/usb/tor' /etc/tor/torrc
+    sed -i '$ a\
+HiddenServiceDir /mnt/usb/tor/hidden_service_ronin_backend/\
+HiddenServiceVersion 3\
+HiddenServicePort 80 127.0.0.1:8470\
+' /etc/tor/torrc
+
     cp /home/ronindojo/RoninDojo/example.tor.service /usr/lib/systemd/system/tor.service
     rm -rf /usr/lib/systemd/system/tor@* #remove unnecessary debian installed services
 }
