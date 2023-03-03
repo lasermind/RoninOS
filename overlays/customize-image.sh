@@ -159,9 +159,10 @@ _prep_install(){
 }
 
 _install_ronin_ui(){
-    . /home/ronindojo/RoninDojo/Scripts/generated-credentials.sh
     . /home/ronindojo/RoninDojo/Scripts/defaults.sh
     . /home/ronindojo/RoninDojo/Scripts/functions.sh
+    . /home/ronindojo/RoninDojo/Scripts/generated-credentials.sh
+
 
     cd /home/ronindojo || exit
 
