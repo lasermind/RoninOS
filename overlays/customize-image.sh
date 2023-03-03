@@ -199,6 +199,8 @@ _rand_passwd() {
 
 _install_ronin_ui(){
 
+    roninui_version_file="https://ronindojo.io/downloads/RoninUI/version.json"
+
     gui_api=$(_rand_passwd 69)
     gui_jwt=$(_rand_passwd 69)
 
