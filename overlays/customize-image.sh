@@ -11,7 +11,7 @@
 echo "add user roinindojo"
 useradd -s /bin/bash -m -c "ronindojo" ronindojo -p rock
 useradd -c "tor" tor && echo "ronindojo    ALL=(ALL) ALL" >> /etc/sudoers
-
+rm /root/.not_logged_in_yet 
 
 echo "set hostname"
 hostname -b "ronindebian"
