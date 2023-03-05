@@ -8,7 +8,7 @@ Type=simple
 User=admin
 WorkingDirectory=/home/admin
 ExecStart=/usr/local/sbin/ronin-setup.sh
-ExecStop=/usr/bin/pm2 resurrect
+ExecStop=/usr/local/sbin/ronin-teardown.sh
 StandardOutput=file:/home/ronindojo/.logs/setup.logs
 
 [Install]

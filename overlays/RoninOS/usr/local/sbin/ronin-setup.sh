@@ -21,4 +21,5 @@ if _main; then
     sudo systemctl disable ronin-setup.service
     sudo systemctl start ronin-post.service
     sudo sed -i '/ronindojo/s/ALL) NOPASSWD:ALL/ALL) ALL/' /etc/sudoers
+    touch /home/ronindojo/.logs/setup-complete
 fi
