@@ -6,8 +6,9 @@ do
    echo "waiting..."
    sleep 5s
    if [ -f /home/ronindojo/.logs/setup-complete ]; then
-      echo "restarting pm2..."
-      pm2 resurrect
+      if ! systemctl is-active pm2-ronindojo.service; then
+        sudo systemctl restart pm2-ronindojo.service
+      fi
       break
    fi
 done
