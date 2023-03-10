@@ -7,7 +7,7 @@ do
    sleep 5s
    if [ -f /home/ronindojo/.logs/setup-complete ]; then
       if ! systemctl is-active pm2-ronindojo.service; then
-        sudo systemctl restart pm2-ronindojo.service
+        sudo systemctl start pm2-ronindojo.service
       fi
       break
    fi

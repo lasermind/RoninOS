@@ -16,7 +16,9 @@ if _main; then
 
     # Restore getty
     sudo systemctl start ronin-post.service
-    sudo systemctl restart pm2-ronindojo.service
+    if ! systemctl is-active pm2-ronindojo.service; then
+        sudo systemctl start pm2-ronindojo.service
+    fi
     sudo systemctl disable ronin-setup.service
     sudo sed -i '/ronindojo/s/ALL) NOPASSWD:ALL/ALL) ALL/' /etc/sudoers
     touch /home/ronindojo/.logs/setup-complete
