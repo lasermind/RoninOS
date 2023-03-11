@@ -19,10 +19,10 @@ hostname -b "ronindebian"
 # RoninDojo part
 TMPDIR=/var/tmp
 USER="ronindojo"
-PASSWORD="password" # test purposes only
-#PASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
-ROOTPASSWORD="password" ## for testing purposes only
-#ROOTPASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
+#PASSWORD="password" # test purposes only
+PASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
+#ROOTPASSWORD="password" ## for testing purposes only
+ROOTPASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
 FULLNAME="RoninDojo"
 TIMEZONE="UTC"
 LOCALE="en_US.UTF-8"
