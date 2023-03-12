@@ -3,6 +3,8 @@
 echo "add user roinindojo"
 useradd -s /bin/bash -m -c "ronindojo" ronindojo -p rock
 useradd -c "tor" tor && echo "ronindojo    ALL=(ALL) ALL" >> /etc/sudoers
+
+#removes the first user login requirement with monitor and keyboard
 rm /root/.not_logged_in_yet 
 
 echo "set hostname"
@@ -123,6 +125,7 @@ _service_checks(){
     fi
 }
 
+# Installs Nodejs, docker, docker-compose, and pm2. Clones the RoninDojo repo. This is needed due to some out dated packages in the default debian package manager.
 _prep_install(){
     # install Nodejs
     curl -sL https://deb.nodesource.com/setup_16.x | bash -
@@ -189,6 +192,7 @@ _rand_passwd() {
     tr -dc 'a-zA-Z0-9' </dev/urandom | head -c"${_length}"
 }
 
+# Install Ronin UI. This function is the same we utilize in the RoninDojo repo. Only modifying slightly since this runs during build and not organic setup.
 _install_ronin_ui(){
 
     roninui_version_file="https://ronindojo.io/downloads/RoninUI/version.json"
@@ -214,7 +218,7 @@ _install_ronin_ui(){
 
     if ! echo "${_shasum} ${_file}" | sha256sum --check --status; then
         _bad_shasum=$(sha256sum ${_file})
-        _print_error_message "Ronin UI archive verification failed! Valid sum is ${_shasum}, got ${_bad_shasum} instead..."
+        echo "Ronin UI archive verification failed! Valid sum is ${_shasum}, got ${_bad_shasum} instead..."
     fi
       
     tar xzf "$_file"
@@ -239,6 +243,7 @@ _install_ronin_ui(){
     chown -R ronindojo:ronindojo /home/ronindojo/Ronin-UI
 }
 
+# The debian default was incompatible with our setup. This sets tor to match RoninDojo requirements and removes the debian variants.
 _prep_tor(){
 	mkdir -p /mnt/usb/tor
 	chown -R tor:tor /mnt/usb/tor
@@ -253,6 +258,7 @@ HiddenServicePort 80 127.0.0.1:8470\
     rm -rf /usr/lib/systemd/system/tor@* #remove unnecessary debian installed services
 }
 
+# This installs all required packages needed for RoninDojo. Clones the RoninOS repo so it can be copied to appropriate locations. Then runs all the functions defined above.
 main(){
     # install dependencies
     apt-get install -y man-db git avahi-daemon nginx openjdk-11-jdk tor fail2ban net-tools htop unzip wget ufw rsync jq python3 python3-pip pipenv gdisk gcc curl apparmor ca-certificates gnupg lsb-release
@@ -284,4 +290,5 @@ main(){
     fi
 }
 
+# Run main setup function.
 main
