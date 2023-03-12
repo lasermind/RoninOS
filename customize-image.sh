@@ -1,13 +1,5 @@
 #!/bin/bash
 
-#####################################################################################################
-#                                                                                                   #
-# Meant as a test for new debian images. will be run by curl -sL <raw content> | sudo -E bash -     #
-#                                                                                                   #
-#####################################################################################################
-
-
-
 echo "add user roinindojo"
 useradd -s /bin/bash -m -c "ronindojo" ronindojo -p rock
 useradd -c "tor" tor && echo "ronindojo    ALL=(ALL) ALL" >> /etc/sudoers
