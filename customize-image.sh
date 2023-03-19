@@ -150,7 +150,7 @@ _prep_install(){
     npm install pm2 -g
 
     # Clone Repo
-    git clone -b feature/debian_mode https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
+    git clone -b release/v2.0.x https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
     chown -R ronindojo:ronindojo /home/ronindojo/RoninDojo
 }
 
