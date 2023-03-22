@@ -2,18 +2,18 @@
 
 regenerate_passwords_and_update_info_file(){
     # Generate a random password consisting of 16 characters using only numbers and letters.
-    ROOTPASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
-    PASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
+    rootpwd="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
+    roninpwd="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
     USER="ronindojo"
 
 
     # Change the root user's password.
     echo "Changing the root user's password..."
-    sudo chpasswd <<<"root:$ROOTPASSWORD"
+    sudo chpasswd <<<"root:$rootpwd"
 
     # Change the ronindojo user's password.
     echo "Changing the ronindojo user's password..."
-    sudo chpasswd <<<"$USER:$PASSWORD"
+    sudo chpasswd <<<"$USER:$roninpwd"
 
     # remove old info.json then create new with new passwords.
     rm -rf /home/ronindojo/.config/RoninDojo/info.json
