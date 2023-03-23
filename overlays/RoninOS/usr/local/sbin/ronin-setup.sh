@@ -18,14 +18,16 @@ regenerate_passwords_and_update_info_file(){
     # remove old info.json then create new with new passwords.
     rm -rf /home/ronindojo/.config/RoninDojo/info.json
     cat <<EOF >/home/"${USER}"/.config/RoninDojo/info.json
-{"user":[{"name":"${USER}","password":"${PASSWORD}"},{"name":"root","password":"${ROOTPASSWORD}"}]}
+{"user":[{"name":"${USER}","password":"${roninpwd}"},{"name":"root","password":"${rootpwd}"}]}
 EOF
 
     # add validation for that the setup was done.
     GENERATE_MESSAGE="Generated during system Setup."
     TIMESTAMP=$(date)
-    echo "${GENERATE_MESSAGE}" >> /home/"${USER}"/.config/RoninDojo/info.json
-    echo "${TIMESTAMP}" >> /home/"${USER}"/.config/RoninDojo/info.json
+    cat <<EOF >/home/"${USER}"/.config/RoninDojo/randompass_gen_time_stamp.txt
+"${GENERATE_MESSAGE}"
+"${TIMESTAMP}" >> /home/"${USER}"/.config/RoninDojo/info.json
+EOF
 }
 
 cd "$HOME"/RoninDojo || exit
