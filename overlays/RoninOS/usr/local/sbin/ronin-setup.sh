@@ -24,9 +24,9 @@ EOF
     # add validation for that the setup was done.
     GENERATE_MESSAGE="Generated during system Setup."
     TIMESTAMP=$(date)
-    cat <<EOF >/home/"${USER}"/.config/RoninDojo/randompass_gen_time_stamp.txt
+    cat <<EOF >/home/"${USER}"/.logs/pass_gen_timestamp.txt
 "${GENERATE_MESSAGE}"
-"${TIMESTAMP}" >> /home/"${USER}"/.config/RoninDojo/info.json
+"${TIMESTAMP}"
 EOF
 }
 
