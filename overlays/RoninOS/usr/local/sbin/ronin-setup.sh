@@ -22,11 +22,11 @@ regenerate_passwords_and_update_info_file(){
 EOF
 
     # add validation for that the setup was done.
-    GENERATE_MESSAGE="Generated during system Setup."
+    GENERATE_MESSAGE="Your password was randomly generated during System Setup."
     TIMESTAMP=$(date)
     cat <<EOF >/home/"${USER}"/.logs/pass_gen_timestamp.txt
-"${GENERATE_MESSAGE}"
-"${TIMESTAMP}"
+$GENERATE_MESSAGE
+Date and Time: $TIMESTAMP
 EOF
 }
 
