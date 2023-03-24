@@ -34,6 +34,9 @@ EOF
 
 cd "$HOME"/RoninDojo || exit
 
+# give time for Startup to finish before trying to update the repo. 
+sleep 75s 
+
 # update repo
 git fetch
 git checkout origin/release/v2.0.x
