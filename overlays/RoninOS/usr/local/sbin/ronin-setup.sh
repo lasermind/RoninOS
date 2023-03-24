@@ -30,7 +30,14 @@ Date and Time: $TIMESTAMP
 EOF
 }
 
+
+
 cd "$HOME"/RoninDojo || exit
+
+# update repo
+git fetch
+git checkout origin/release/v2.0.x
+
 # Source files
 . Scripts/defaults.sh
 . Scripts/functions.sh
