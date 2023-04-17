@@ -39,7 +39,7 @@ sleep 75s
 
 # update repo
 git fetch
-git checkout origin/release/v2.0.x
+git checkout origin/master
 
 # Source files
 . Scripts/defaults.sh
