@@ -264,7 +264,7 @@ main(){
     apt-get install -y man-db git avahi-daemon nginx openjdk-11-jdk tor fail2ban net-tools htop unzip wget ufw rsync jq python3 python3-pip pipenv gdisk gcc curl apparmor ca-certificates gnupg lsb-release
     
     # clone the original RoninOS
-    git clone -b feature/debian https://code.samourai.io/ronindojo/RoninOS.git /tmp/RoninOS
+    git clone https://code.samourai.io/ronindojo/RoninOS.git /tmp/RoninOS
 
     cp -Rv /tmp/RoninOS/overlays/RoninOS/usr/* /usr/
     cp -Rv /tmp/RoninOS/overlays/RoninOS/etc/* /etc/
