@@ -32,14 +32,13 @@ EOF
 
 
 
-cd "$HOME"/RoninDojo || exit
+cd "$HOME" || exit
 
 # give time for Startup to finish before trying to update the repo. 
 sleep 75s 
 
-# update repo
-git fetch
-git checkout origin/master
+# Clone Repo
+git clone -b origin/master https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
 
 # Source files
 . Scripts/defaults.sh
