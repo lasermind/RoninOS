@@ -148,10 +148,6 @@ _prep_install(){
 
     # install pm2 
     npm install pm2 -g
-
-    # Clone Repo
-    git clone -b master https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
-    chown -R ronindojo:ronindojo /home/ronindojo/RoninDojo
 }
 
 _ronin_ui_avahi_service() {
@@ -168,7 +164,6 @@ _ronin_ui_avahi_service() {
   </service>
 </service-group>
 EOF
-
     fi
 
     sed -i 's/hosts: .*$/hosts: files mdns_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] dns mdns/' /etc/nsswitch.conf
@@ -254,7 +249,7 @@ HiddenServiceVersion 3\
 HiddenServicePort 80 127.0.0.1:8470\
 ' /etc/tor/torrc
 
-    cp /home/ronindojo/RoninDojo/example.tor.service /usr/lib/systemd/system/tor.service
+    cp -Rv /tmp/RoninOS/overlays/RoninOS/example.tor.service /usr/lib/systemd/system/tor.service
     rm -rf /usr/lib/systemd/system/tor@* #remove unnecessary debian installed services
 }
 
