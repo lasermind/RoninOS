@@ -38,7 +38,8 @@ cd "$HOME" || exit
 sleep 75s 
 
 # Clone Repo
-git clone -b origin/master https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
+git clone -b master https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
+cd /home/ronindojo/RoninDojo
 
 # Source files
 . Scripts/defaults.sh
