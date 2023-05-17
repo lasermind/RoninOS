@@ -30,7 +30,7 @@ Date and Time: $TIMESTAMP
 EOF
 }
 
-
+sed -i '/ronindojo/s/ALL) ALL/ALL) NOPASSWD:ALL/' /etc/sudoers # change to no password
 
 cd "$HOME" || exit
 
