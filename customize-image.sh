@@ -256,6 +256,7 @@ HiddenServicePort 80 127.0.0.1:8470\
 # This installs all required packages needed for RoninDojo. Clones the RoninOS repo so it can be copied to appropriate locations. Then runs all the functions defined above.
 main(){
     # install dependencies
+    apt-get update
     apt-get install -y man-db git avahi-daemon nginx openjdk-11-jdk tor fail2ban net-tools htop unzip wget ufw rsync jq python3 python3-pip pipenv gdisk gcc curl apparmor ca-certificates gnupg lsb-release
     
     # clone the original RoninOS
