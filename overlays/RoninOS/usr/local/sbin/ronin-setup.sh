@@ -38,7 +38,8 @@ cd "$HOME" || exit
 sleep 75s 
 
 # Clone Repo
-git clone -b master https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
+# TEMPORARY CODE CHANGE, DO NOT MERGE
+git clone -b feature/dojo_update https://code.samourai.io/ronindojo/RoninDojo /home/ronindojo/RoninDojo
 cd /home/ronindojo/RoninDojo
 
 # Source files
