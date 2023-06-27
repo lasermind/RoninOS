@@ -72,17 +72,9 @@ EOF
 	# localectl set-locale $LOCALE
 	
 
-    if [ -f /etc/sway/inputs/default-keyboard ]; then
-        sed -i "s/us/$KEYMAP/" /etc/sway/inputs/default-keyboard
-
-        if [ "$KEYMAP" = "uk" ]; then
-            sed -i "s/uk/gb/" /etc/sway/inputs/default-keyboard
-        fi
-    fi
-
-
-    loadkeys "$KEYMAP"
-
+	# Preparing keyboard layout to be set to $KEYMAP
+	echo -e "Setting keyboard layout to [${CGREEN} $KEYMAP ${CDEF}]"
+	sed -i "s/XKBLAYOUT.*/XKBLAYOUT=\"$KEYMAP\"/" /etc/default/keyboard	
     # Configuration complete. Cleaning up
     #rm /root/.bash_profile
 
