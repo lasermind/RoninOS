@@ -74,8 +74,6 @@ EOF
         fi
     fi
 
-    # Resizing partition
-    resize-fs &>/dev/null
 
     loadkeys "$KEYMAP"
 
