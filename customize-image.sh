@@ -16,6 +16,9 @@ PASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
 #ROOTPASSWORD="password" ## for testing purposes only
 ROOTPASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
 FULLNAME="RoninDojo"
+
+
+# Locales		 
 TIMEZONE="UTC"
 LOCALE="en_US.UTF-8"
 KEYMAP="us"
@@ -52,8 +55,11 @@ EOF
     chown -R "${USER}":"${USER}" /home/"${USER}"/.config
 
     # Setting timezone to $TIMEZONE
-    timedatectl set-timezone $TIMEZONE &>/dev/null
-    timedatectl set-ntp true &>/dev/null
+	echo -e "Preparing for timezone [${CGREEN} $TIMEZONE ${CDEF}]"
+	sed -i -e "1a\ " \
+	   -e "1asudo timedatectl set-timezone ${TIMEZONE}" \
+	   -e "1asudo timedatectl set-ntp true" \
+	   -e "1a\ " /usr/local/sbin/ronin-setup.sh
 
     # Generating $LOCALE locale
     sed -i "s/#$LOCALE/$LOCALE/" /etc/locale.gen &>/dev/null
