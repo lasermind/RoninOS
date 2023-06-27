@@ -7,8 +7,6 @@ useradd -c "tor" tor && echo "ronindojo    ALL=(ALL) ALL" >> /etc/sudoers
 #removes the first user login requirement with monitor and keyboard
 rm /root/.not_logged_in_yet 
 
-echo "set hostname"
-hostname -b "ronindebian"
 
 # RoninDojo part
 TMPDIR=/var/tmp
@@ -20,7 +18,6 @@ ROOTPASSWORD="$(tr -dc 'a-zA-Z0-9' </dev/urandom | head -c'21')"
 FULLNAME="RoninDojo"
 TIMEZONE="UTC"
 LOCALE="en_US.UTF-8"
-HOSTNAME="RoninDojo"
 KEYMAP="us"
 
 _create_oem_install() {
@@ -64,9 +61,6 @@ EOF
             sed -i "s/uk/gb/" /etc/sway/inputs/default-keyboard
         fi
     fi
-
-    # Setting hostname to $HOSTNAME
-    hostnamectl set-hostname $HOSTNAME &>/dev/null
 
     # Resizing partition
     resize-fs &>/dev/null
