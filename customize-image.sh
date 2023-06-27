@@ -260,6 +260,7 @@ main(){
     # install dependencies
     apt-get update
     apt-get install -y man-db git avahi-daemon nginx openjdk-11-jdk tor fail2ban net-tools htop unzip wget ufw rsync jq python3 python3-pip pipenv gdisk gcc curl apparmor ca-certificates gnupg lsb-release
+	apt-get install -y mc glances
     
     # clone the original RoninOS
     git clone https://code.samourai.io/ronindojo/RoninOS.git /tmp/RoninOS
