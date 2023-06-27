@@ -262,12 +262,16 @@ main(){
     apt-get install -y man-db git avahi-daemon nginx openjdk-11-jdk tor fail2ban net-tools htop unzip wget ufw rsync jq python3 python3-pip pipenv gdisk gcc curl apparmor ca-certificates gnupg lsb-release
 	apt-get install -y mc glances
     
-    # clone the original RoninOS
-    git clone https://code.samourai.io/ronindojo/RoninOS.git /tmp/RoninOS
-
-    cp -Rv /tmp/RoninOS/overlays/RoninOS/usr/* /usr/
-    cp -Rv /tmp/RoninOS/overlays/RoninOS/etc/* /etc/
-    ### sanity check ###
+	
+	# Pass user-prepared RoninOS repo on from overlay to build
+	echo -e "Preparing scripts for [${CGREEN} RoninOS ${CDEF}]"
+	mkdir -p /tmp/RoninOS
+	cp -R /tmp/overlay/RoninOS/* /tmp/RoninOS
+	cp -R /tmp/RoninOS/overlays/RoninOS/usr/* /usr/
+	cp -R /tmp/RoninOS/overlays/RoninOS/etc/* /etc/
+    
+	
+	### sanity check ###
     # TODO: Remove this after successful runs.
     if [ ! -f /usr/lib/systemd/system/ronin-setup.service ]; then
         echo "ronin-setup.service is missing..."
