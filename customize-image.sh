@@ -61,10 +61,16 @@ EOF
 	   -e "1asudo timedatectl set-ntp true" \
 	   -e "1a\ " /usr/local/sbin/ronin-setup.sh
 
-    # Generating $LOCALE locale
-    sed -i "s/#$LOCALE/$LOCALE/" /etc/locale.gen &>/dev/null
-    locale-gen &>/dev/null
-    localectl set-locale $LOCALE &>/dev/null
+    
+	# Generating desired $LOCALE as additional locale
+	echo -e "Adding locale [${CGREEN} $LOCALE ${CDEF}]"
+	# Uncomment desired locale; but also keep preset 'en_US' as a necessary default
+	sed -i "s/^\s*#.*$LOCALE/$LOCALE/" /etc/locale.gen
+	locale-gen
+	# We should not set this locale now, because it is not wise to set non-standard locale ('en_US')
+	# Some scripts can complain and break, especially during build time
+	# localectl set-locale $LOCALE
+	
 
     if [ -f /etc/sway/inputs/default-keyboard ]; then
         sed -i "s/us/$KEYMAP/" /etc/sway/inputs/default-keyboard
