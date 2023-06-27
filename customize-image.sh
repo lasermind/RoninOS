@@ -20,6 +20,12 @@ TIMEZONE="UTC"
 LOCALE="en_US.UTF-8"
 KEYMAP="us"
 
+# Terminal colours
+CGREEN="\033[0;32m"
+CRED="\033[0;31m"
+CDEF="\033[0m"	
+			  
+
 _create_oem_install() {
     pam-auth-update --package	
     # Setting root password
