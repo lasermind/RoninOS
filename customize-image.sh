@@ -255,6 +255,34 @@ HiddenServicePort 80 127.0.0.1:8470\
     rm -rf /usr/lib/systemd/system/tor@* #remove unnecessary debian installed services
 }
 
+
+# If RoninOS image needs to be compiled with a static IP preset, then make your edits here
+# Adapted from: wiki.ronindojo.io/en/extras/Setting-Static-IP
+# Uncomment _prep_staticip() function in main() to make use of this
+_prep_staticip(){
+
+    echo -e "Preparing for local IP to be [${CGREEN} static ${CDEF}]"
+
+    systemctl -q disable NetworkManager.service
+    mkdir -p /etc/systemd/network
+
+    echo " "
+    tee "/etc/systemd/network/eth0.network" <<EOF
+[Match]
+Name=eth0
+
+[Network]
+Address=192.168.0.21
+Gateway=192.168.0.1
+DNS=192.168.0.1
+DNS=9.9.9.9
+EOF
+
+    systemctl -q unmask systemd-networkd.service
+    systemctl -q enable systemd-networkd.service
+}
+
+
 # This installs all required packages needed for RoninDojo. Clones the RoninOS repo so it can be copied to appropriate locations. Then runs all the functions defined above.
 main(){
     # install dependencies
@@ -283,6 +311,7 @@ main(){
     else 
         echo "Setup service is PRESENT! Keep going!"
         _create_oem_install
+        # _prep_staticip # Use this if static IP is needed
         _prep_install
         _prep_tor
         usermod -aG pm2 ronindojo
