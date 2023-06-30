@@ -121,6 +121,8 @@ It runs during build time and prepares certain settings and packages to be prese
 
 
 It may be desirable to preset your preferred keyboard layout (`KEYMAP`) and time zone (`TIMEZONE`) for the target machine.
+Also, if for whatever reason your image needs to be build with a static IP preset, you can make your edits to `_prep_staticip()`.
+Only with these values correctly set, your RoninOS will find its way to the internet on first run and can operate correctly.
 
 
 **Tip:** To make browsing and editing files much easier, do yourself a favour and install [Midnight Commander](https://en.wikipedia.org/wiki/Midnight_Commander) 
@@ -223,6 +225,7 @@ and advertises the `ronindojo.local` domain in your network.
 You can then connect via any browser on any device in your network (desktop recommended) to RoninUI made available to you.
 Should `ronindojo.local` not be provided, use the local IP address of this device – you can find out which IP address was handed by DHCP to it,
 by skimming in your router’s section of the currently connected devices. It’s common to find an IP address in the form of `192.168.xxx.xxx` in local networks.
+If still in doubt, compile your RoninOS with a static IP preset – see [1.4.1](#14-making-edits-to-customise-your-build).
  
 From here, refer to the RoninDojo Wiki page to find your way around RoninUI: https://wiki.ronindojo.io/en/setup/ronin-ui.
  
