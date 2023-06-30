@@ -314,7 +314,7 @@ main(){
         # _prep_staticip # Use this if static IP is needed
         _prep_install
         _prep_tor
-        usermod -aG pm2 ronindojo
+
         mkdir -p /usr/share/nginx/logs
         rm -rf /etc/nginx/sites-enabled/default
         _install_ronin_ui
