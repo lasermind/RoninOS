@@ -260,7 +260,7 @@ main(){
     apt-get install -y man-db git avahi-daemon nginx openjdk-11-jdk fail2ban net-tools htop unzip wget ufw rsync jq python3 python3-pip pipenv gdisk gcc curl apparmor ca-certificates gnupg lsb-release
     apt-get install -y tor/bullseye-backports #install 0.4.7.x tor
     # clone the original RoninOS
-    git clone -b release/v2.1.0 https://code.samourai.io/ronindojo/RoninOS.git /tmp/RoninOS
+    git clone https://code.samourai.io/ronindojo/RoninOS.git /tmp/RoninOS
 
     cp -Rv /tmp/RoninOS/overlays/RoninOS/usr/* /usr/
     cp -Rv /tmp/RoninOS/overlays/RoninOS/etc/* /etc/
