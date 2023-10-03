@@ -30,8 +30,6 @@ Date and Time: $TIMESTAMP
 EOF
 }
 
-sed -i '/ronindojo/s/ALL) ALL/ALL) NOPASSWD:ALL/' /etc/sudoers # change to no password
-
 cd "$HOME" || exit
 
 # give time for Startup to finish before trying to update the repo. 
@@ -62,6 +60,5 @@ if _main; then
         sudo systemctl start pm2-ronindojo.service
     fi
     sudo systemctl disable ronin-setup.service
-    sudo sed -i '/ronindojo/s/ALL) NOPASSWD:ALL/ALL) ALL/' /etc/sudoers
     touch /home/ronindojo/.logs/setup-complete
 fi

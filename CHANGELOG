@@ -1,0 +1,10 @@
+Changelog
+
+RoninOS v2.1.0 Change log
+
+- Updated tor to 0.4.7
+- Removed autologin regarding physical access
+- Simplified ronin-setup.sh script (no need to change entries in the sudoers file)
+- Cleanup (teardown .sh files)
+- Improved installation service to wait for network interface to be up and have an uplink to the router
+- Credits: dammkewl, BTCxZelko, s2l1, Numbers, KYC3, WittyBull
