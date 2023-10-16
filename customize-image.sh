@@ -332,7 +332,8 @@ main(){
     # Installing dependencies
     echo -e "Preparing and installing packages [${CGREEN} GO ${CDEF}]"
     apt-get update
-    apt-get install -y man-db git avahi-daemon nginx openjdk-11-jdk tor fail2ban net-tools htop unzip wget ufw rsync jq python3 python3-pip pipenv gdisk gcc curl apparmor ca-certificates gnupg lsb-release
+    apt-get install -y man-db git avahi-daemon nginx openjdk-11-jdk fail2ban net-tools htop unzip wget ufw rsync jq python3 python3-pip pipenv gdisk gcc curl apparmor ca-certificates gnupg lsb-release
+    apt-get install -y tor/bullseye-backports #install 0.4.7.x tor
     apt-get install -y mc glances
 
     # Pass user-prepared RoninOS repo on from overlay to build
